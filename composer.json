@@ -1,0 +1,83 @@
+{
+    "name": "wp-pluginner/wp-pluginner-framework",
+    "description": "WpPluginner Framework, Rewrite from Lumen Framework for use inside wordpress.",
+    "keywords": ["framework", "laravel", "lumen"],
+    "license": "MIT",
+    "homepage": "https://setranmedia.com",
+    "support": {
+        "issues": "https://github.com/wp-pluginner/wp-pluginner-framework/issues",
+        "source": "https://github.com/wp-pluginner/wp-pluginner-framework"
+    },
+    "authors": [
+        {
+            "name": "Pijar Aji Pratama",
+            "email": "setranmedia@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "doctrine/inflector": "~1.1",
+        "monolog/monolog": "~1.11",
+        "mtdowling/cron-expression": "~1.0",
+        "nesbot/carbon": "~1.20",
+        "nikic/fast-route": "~1.0",
+        "paragonie/random_compat": "~1.4|~2.0",
+        "symfony/console": "~3.2",
+        "symfony/debug": "~3.2",
+        "symfony/finder": "~3.2",
+        "symfony/http-kernel": "~3.2",
+        "symfony/http-foundation": "~3.2",
+        "symfony/process": "~3.2"
+    },
+    "replace": {
+        "illuminate/auth": "self.version",
+        "illuminate/broadcasting": "self.version",
+        "illuminate/bus": "self.version",
+        "illuminate/cache": "self.version",
+        "illuminate/config": "self.version",
+        "illuminate/container": "self.version",
+        "illuminate/contracts": "self.version",
+        "illuminate/database": "self.version",
+        "illuminate/encryption": "self.version",
+        "illuminate/events": "self.version",
+        "illuminate/filesystem": "self.version",
+        "illuminate/hashing": "self.version",
+        "illuminate/http": "self.version",
+        "illuminate/pagination": "self.version",
+        "illuminate/pipeline": "self.version",
+        "illuminate/queue": "self.version",
+        "illuminate/support": "self.version",
+        "illuminate/translation": "self.version",
+        "illuminate/validation": "self.version",
+        "illuminate/view": "self.version"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.7",
+        "mockery/mockery": "~0.9"
+    },
+    "suggest": {
+        "laravel/tinker": "Required to use the tinker console command (~1.0).",
+        "vlucas/phpdotenv": "Required to use .env files (~2.2)."
+    },
+    "autoload": {
+        "psr-4": {
+            "WpPluginner\\Illuminate\\": "illuminate/",
+            "WpPluginner\\Lumen\\": "lumen/",
+            "WpPluginner\\Wordpress\\": "wordpress/"
+        },
+        "files": [
+            "illuminate/Support/helpers.php",
+            "lumen/helpers.php",
+            "wordpress/helpers.php"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "5.4-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
