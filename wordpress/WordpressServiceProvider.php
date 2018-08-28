@@ -17,9 +17,8 @@ class WordpressServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //Send Menu to wordpress actions hook
-        if (is_admin()) {
-            $this->app['wp.admin.menu']->send();
+        if ($this->app->runningInConsole()) {
+            $this->commands([Console\DeployerCommand::class]);
         }
     }
 
