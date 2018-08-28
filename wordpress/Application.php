@@ -79,6 +79,17 @@ class Application extends LumenContainer
         $this->make('db');
     }
 
+    /**
+     * Get the path to the database directory.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function configPath($path = '')
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'config'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
     public function environment()
     {
         $env = wp_pluginner_env('APP_ENV', wp_pluginner_config('app.env', 'production'));
@@ -286,6 +297,13 @@ class Application extends LumenContainer
         });
 
         $this->booted = true;
+    }
+
+    protected function registerViewBindings()
+    {
+        $this->singleton('view', function () {
+            return $this->loadComponent('view', 'WpPluginner\Wordpress\StringBlade\ViewServiceProvider');
+        });
     }
 
 }

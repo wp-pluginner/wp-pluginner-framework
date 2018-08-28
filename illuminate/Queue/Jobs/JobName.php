@@ -2,7 +2,6 @@
 
 namespace WpPluginner\Illuminate\Queue\Jobs;
 
-use WpPluginner\Illuminate\Support\Arr;
 use WpPluginner\Illuminate\Support\Str;
 
 class JobName
@@ -29,14 +28,6 @@ class JobName
     {
         if (! empty($payload['displayName'])) {
             return $payload['displayName'];
-        }
-
-        if ($name === 'WpPluginner\Illuminate\Queue\CallQueuedHandler@call') {
-            return Arr::get($payload, 'data.commandName', $name);
-        }
-
-        if ($name === 'WpPluginner\Illuminate\Events\CallQueuedHandler@call') {
-            return $payload['data']['class'].'@'.$payload['data']['method'];
         }
 
         return $name;

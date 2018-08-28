@@ -2,7 +2,7 @@
 
 namespace WpPluginner\Illuminate\Queue\Jobs;
 
-use WpPluginner\Illuminate\Queue\InteractsWithTime;
+use WpPluginner\Illuminate\Support\InteractsWithTime;
 
 class DatabaseJobRecord
 {

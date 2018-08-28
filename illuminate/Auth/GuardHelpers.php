@@ -2,6 +2,7 @@
 
 namespace WpPluginner\Illuminate\Auth;
 
+use WpPluginner\Illuminate\Contracts\Auth\UserProvider;
 use WpPluginner\Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 /**
@@ -82,5 +83,26 @@ trait GuardHelpers
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * Get the user provider used by the guard.
+     *
+     * @return \WpPluginner\Illuminate\Contracts\Auth\UserProvider
+     */
+    public function getProvider()
+    {
+        return $this->provider;
+    }
+
+    /**
+     * Set the user provider used by the guard.
+     *
+     * @param  \WpPluginner\Illuminate\Contracts\Auth\UserProvider  $provider
+     * @return void
+     */
+    public function setProvider(UserProvider $provider)
+    {
+        $this->provider = $provider;
     }
 }

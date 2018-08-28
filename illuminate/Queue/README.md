@@ -7,7 +7,7 @@ The Laravel Queue component provides a unified API across a variety of different
 First, create a new Queue `Capsule` manager instance. Similar to the "Capsule" provided for the Eloquent ORM, the queue Capsule aims to make configuring the library for usage outside of the Laravel framework as easy as possible.
 
 ```PHP
-use Illuminate\Queue\Capsule\Manager as Queue;
+use WpPluginner\Illuminate\Queue\Capsule\Manager as Queue;
 
 $queue = new Queue;
 

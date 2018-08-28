@@ -24,8 +24,16 @@ class ConsoleServiceProvider extends ServiceProvider
         'QueueRestart' => 'command.queue.restart',
         'QueueRetry' => 'command.queue.retry',
         'QueueWork' => 'command.queue.work',
+        'VendorPublish' => 'command.vendor.publish',
         'Seed' => 'command.seed',
         'ScheduleFinish' => 'WpPluginner\Illuminate\Console\Scheduling\ScheduleFinishCommand',
         'ScheduleRun' => 'WpPluginner\Illuminate\Console\Scheduling\ScheduleRunCommand',
     ];
+
+    protected function registerVendorPublishCommand()
+    {
+        $this->app->singleton('command.vendor.publish', function () {
+            return new VendorPublishCommand;
+        });
+    }
 }

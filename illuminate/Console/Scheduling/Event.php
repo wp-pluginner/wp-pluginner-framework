@@ -3,8 +3,8 @@
 namespace WpPluginner\Illuminate\Console\Scheduling;
 
 use Closure;
-use Carbon\Carbon;
 use Cron\CronExpression;
+use WpPluginner\Illuminate\Support\Carbon;
 use GuzzleHttp\Client as HttpClient;
 use WpPluginner\Illuminate\Contracts\Mail\Mailer;
 use Symfony\Component\Process\Process;
@@ -197,7 +197,7 @@ class Event
         $this->callBeforeCallbacks($container);
 
         (new Process(
-            $this->buildCommand(), base_path(), null, null, null
+            $this->buildCommand(), wp_pluginner_base_path(), null, null, null
         ))->run();
 
         $this->callAfterCallbacks($container);
@@ -214,7 +214,7 @@ class Event
         $this->callBeforeCallbacks($container);
 
         (new Process(
-            $this->buildCommand(), base_path(), null, null, null
+            $this->buildCommand(), wp_pluginner_base_path(), null, null, null
         ))->run();
     }
 
@@ -398,7 +398,7 @@ class Event
     protected function ensureOutputIsBeingCapturedForEmail()
     {
         if (is_null($this->output) || $this->output == $this->getDefaultOutput()) {
-            $this->sendOutputTo(storage_path('logs/schedule-'.sha1($this->mutexName()).'.log'));
+            $this->sendOutputTo(wp_pluginner_storage_path('logs/schedule-'.sha1($this->mutexName()).'.log'));
         }
     }
 
@@ -434,7 +434,7 @@ class Event
             return $this->description;
         }
 
-        return 'Scheduled Job Output';
+        return "Scheduled Job Output For [{$this->command}]";
     }
 
     /**
@@ -535,12 +535,14 @@ class Event
     /**
      * Register a callback to further filter the schedule.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure|bool  $callback
      * @return $this
      */
-    public function when(Closure $callback)
+    public function when($callback)
     {
-        $this->filters[] = $callback;
+        $this->filters[] = is_callable($callback) ? $callback : function () use ($callback) {
+            return $callback;
+        };
 
         return $this;
     }
@@ -548,12 +550,14 @@ class Event
     /**
      * Register a callback to further filter the schedule.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure|bool  $callback
      * @return $this
      */
-    public function skip(Closure $callback)
+    public function skip($callback)
     {
-        $this->rejects[] = $callback;
+        $this->rejects[] = is_callable($callback) ? $callback : function () use ($callback) {
+            return $callback;
+        };
 
         return $this;
     }
@@ -639,11 +643,11 @@ class Event
      * @param  \DateTime|string  $currentTime
      * @param  int  $nth
      * @param  bool  $allowCurrentDate
-     * @return \Carbon\Carbon
+     * @return \WpPluginner\Illuminate\Support\Carbon
      */
     public function nextRunDate($currentTime = 'now', $nth = 0, $allowCurrentDate = false)
     {
-        return Carbon::instance($nextDue = CronExpression::factory(
+        return Carbon::instance(CronExpression::factory(
             $this->getExpression()
         )->getNextRunDate($currentTime, $nth, $allowCurrentDate));
     }

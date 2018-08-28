@@ -4,7 +4,8 @@ namespace WpPluginner\Illuminate\Console\Scheduling;
 
 use WpPluginner\Illuminate\Console\Application;
 use WpPluginner\Illuminate\Container\Container;
-use Symfony\Component\Process\ProcessUtils;
+use WpPluginner\Illuminate\Support\ProcessUtils;
+use WpPluginner\Illuminate\Contracts\Queue\ShouldQueue;
 
 class Schedule
 {
@@ -74,12 +75,19 @@ class Schedule
      * Add a new job callback event to the schedule.
      *
      * @param  object|string  $job
+     * @param  string|null  $queue
      * @return \WpPluginner\Illuminate\Console\Scheduling\CallbackEvent
      */
-    public function job($job)
+    public function job($job, $queue = null)
     {
-        return $this->call(function () use ($job) {
-            dispatch(is_string($job) ? resolve($job) : $job);
+        return $this->call(function () use ($job, $queue) {
+            $job = is_string($job) ? resolve($job) : $job;
+
+            if ($job instanceof ShouldQueue) {
+                wp_pluginner_dispatch($job)->onQueue($queue);
+            } else {
+                wp_pluginner_dispatch_now($job);
+            }
         })->name(is_string($job) ? $job : get_class($job));
     }
 
@@ -126,7 +134,7 @@ class Schedule
      * Get all of the events on the schedule that are due.
      *
      * @param  \WpPluginner\Illuminate\Contracts\Foundation\Application  $app
-     * @return array
+     * @return \WpPluginner\Illuminate\Support\Collection
      */
     public function dueEvents($app)
     {

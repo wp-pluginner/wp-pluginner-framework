@@ -2,8 +2,8 @@
 
 namespace WpPluginner\Illuminate\Auth\Passwords;
 
-use Carbon\Carbon;
 use WpPluginner\Illuminate\Support\Str;
+use WpPluginner\Illuminate\Support\Carbon;
 use WpPluginner\Illuminate\Database\ConnectionInterface;
 use WpPluginner\Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use WpPluginner\Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;

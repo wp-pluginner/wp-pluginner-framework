@@ -13,7 +13,7 @@ class MySqlProcessor extends Processor
     public function processColumnListing($results)
     {
         return array_map(function ($result) {
-            return wp_pluginner_with((object) $result)->column_name;
+            return ((object) $result)->column_name;
         }, $results);
     }
 }

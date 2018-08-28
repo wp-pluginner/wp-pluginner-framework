@@ -8,9 +8,9 @@ use ArrayAccess;
 use BadMethodCallException;
 use WpPluginner\Illuminate\Support\Str;
 use WpPluginner\Illuminate\Support\MessageBag;
+use WpPluginner\Illuminate\Contracts\View\Engine;
 use WpPluginner\Illuminate\Contracts\Support\Arrayable;
 use WpPluginner\Illuminate\Contracts\Support\Renderable;
-use WpPluginner\Illuminate\View\Engines\EngineInterface;
 use WpPluginner\Illuminate\Contracts\Support\MessageProvider;
 use WpPluginner\Illuminate\Contracts\View\View as ViewContract;
 
@@ -26,7 +26,7 @@ class View implements ArrayAccess, ViewContract
     /**
      * The engine implementation.
      *
-     * @var \WpPluginner\Illuminate\View\Engines\EngineInterface
+     * @var \WpPluginner\Illuminate\Contracts\View\Engine
      */
     protected $engine;
 
@@ -55,13 +55,13 @@ class View implements ArrayAccess, ViewContract
      * Create a new view instance.
      *
      * @param  \WpPluginner\Illuminate\View\Factory  $factory
-     * @param  \WpPluginner\Illuminate\View\Engines\EngineInterface  $engine
+     * @param  \WpPluginner\Illuminate\Contracts\View\Engine  $engine
      * @param  string  $view
      * @param  string  $path
      * @param  mixed  $data
      * @return void
      */
-    public function __construct(Factory $factory, EngineInterface $engine, $view, $path, $data = [])
+    public function __construct(Factory $factory, Engine $engine, $view, $path, $data = [])
     {
         $this->view = $view;
         $this->path = $path;
@@ -158,7 +158,7 @@ class View implements ArrayAccess, ViewContract
     /**
      * Get the sections of the rendered view.
      *
-     * @return array
+     * @return string
      */
     public function renderSections()
     {
@@ -287,7 +287,7 @@ class View implements ArrayAccess, ViewContract
     /**
      * Get the view's rendering engine.
      *
-     * @return \WpPluginner\Illuminate\View\Engines\EngineInterface
+     * @return \WpPluginner\Illuminate\Contracts\View\Engine
      */
     public function getEngine()
     {
@@ -399,7 +399,7 @@ class View implements ArrayAccess, ViewContract
             throw new BadMethodCallException("Method [$method] does not exist on view.");
         }
 
-        return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
+        return $this->with(Str::camel(substr($method, 4)), $parameters[0]);
     }
 
     /**

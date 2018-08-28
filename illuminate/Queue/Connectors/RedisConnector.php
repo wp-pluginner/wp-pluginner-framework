@@ -2,7 +2,6 @@
 
 namespace WpPluginner\Illuminate\Queue\Connectors;
 
-use WpPluginner\Illuminate\Support\Arr;
 use WpPluginner\Illuminate\Queue\RedisQueue;
 use WpPluginner\Illuminate\Contracts\Redis\Factory as Redis;
 
@@ -45,8 +44,8 @@ class RedisConnector implements ConnectorInterface
     {
         return new RedisQueue(
             $this->redis, $config['queue'],
-            Arr::get($config, 'connection', $this->connection),
-            Arr::get($config, 'retry_after', 60)
+            $config['connection'] ?? $this->connection,
+            $config['retry_after'] ?? 60
         );
     }
 }

@@ -2,8 +2,8 @@
 
 namespace WpPluginner\Illuminate\Queue\Console;
 
-use Carbon\Carbon;
 use WpPluginner\Illuminate\Queue\Worker;
+use WpPluginner\Illuminate\Support\Carbon;
 use WpPluginner\Illuminate\Console\Command;
 use WpPluginner\Illuminate\Contracts\Queue\Job;
 use WpPluginner\Illuminate\Queue\WorkerOptions;
@@ -62,7 +62,7 @@ class WorkCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         if ($this->downForMaintenance() && $this->option('once')) {
             return $this->worker->sleep($this->option('sleep'));
@@ -177,7 +177,7 @@ class WorkCommand extends Command
     /**
      * Store a failed job event.
      *
-     * @param  JobFailed  $event
+     * @param  \WpPluginner\Illuminate\Queue\Events\JobFailed  $event
      * @return void
      */
     protected function logFailedJob(JobFailed $event)

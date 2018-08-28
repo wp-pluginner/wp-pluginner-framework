@@ -3,8 +3,9 @@
 namespace WpPluginner\Illuminate\Contracts\Container;
 
 use Exception;
+use Psr\Container\ContainerExceptionInterface;
 
-class BindingResolutionException extends Exception
+class BindingResolutionException extends Exception implements ContainerExceptionInterface
 {
     //
 }

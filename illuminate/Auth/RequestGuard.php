@@ -5,6 +5,7 @@ namespace WpPluginner\Illuminate\Auth;
 use WpPluginner\Illuminate\Http\Request;
 use WpPluginner\Illuminate\Contracts\Auth\Guard;
 use WpPluginner\Illuminate\Support\Traits\Macroable;
+use WpPluginner\Illuminate\Contracts\Auth\UserProvider;
 
 class RequestGuard implements Guard
 {
@@ -29,12 +30,14 @@ class RequestGuard implements Guard
      *
      * @param  callable  $callback
      * @param  \WpPluginner\Illuminate\Http\Request  $request
+     * @param  \WpPluginner\Illuminate\Contracts\Auth\UserProvider|null $provider
      * @return void
      */
-    public function __construct(callable $callback, Request $request)
+    public function __construct(callable $callback, Request $request, UserProvider $provider = null)
     {
         $this->request = $request;
         $this->callback = $callback;
+        $this->provider = $provider;
     }
 
     /**
@@ -52,7 +55,7 @@ class RequestGuard implements Guard
         }
 
         return $this->user = call_user_func(
-            $this->callback, $this->request
+            $this->callback, $this->request, $this->getProvider()
         );
     }
 
@@ -65,7 +68,7 @@ class RequestGuard implements Guard
     public function validate(array $credentials = [])
     {
         return ! is_null((new static(
-            $this->callback, $credentials['request']
+            $this->callback, $credentials['request'], $this->getProvider()
         ))->user());
     }
 

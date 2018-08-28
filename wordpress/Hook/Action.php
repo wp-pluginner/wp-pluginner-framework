@@ -14,17 +14,14 @@ class Action extends Hook
 		return $this;
 	}
 
-	public function do(string $tag)
+	public function do(string $tag, $value = null)
 	{
 		if (func_num_args() > 2) {
 			$args = func_get_args();
 			array_shift( $args );
             return do_action_ref_array($tag, $args);
-        } elseif (func_num_args() == 2) {
-			$arg = func_get_args(1);
-            return do_action($tag, $arg);
         }
-        return do_action($tag);
+        return do_action($tag, $value);
 	}
 
 	public function doRefArray(string $tag, array $args)

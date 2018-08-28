@@ -3,6 +3,7 @@
 namespace WpPluginner\Illuminate\Database\Schema;
 
 use Closure;
+use LogicException;
 use WpPluginner\Illuminate\Database\Connection;
 
 class Builder
@@ -129,9 +130,9 @@ class Builder
      */
     public function getColumnListing($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
-
-        $results = $this->connection->select($this->grammar->compileColumnListing($table));
+        $results = $this->connection->select($this->grammar->compileColumnListing(
+            $this->connection->getTablePrefix().$table
+        ));
 
         return $this->connection->getPostProcessor()->processColumnListing($results);
     }
@@ -188,6 +189,18 @@ class Builder
         $this->build(wp_pluginner_tap($this->createBlueprint($table), function ($blueprint) {
             $blueprint->dropIfExists();
         }));
+    }
+
+    /**
+     * Drop all tables from the database.
+     *
+     * @return void
+     *
+     * @throws \LogicException
+     */
+    public function dropAllTables()
+    {
+        throw new LogicException('This database driver does not support dropping all tables.');
     }
 
     /**

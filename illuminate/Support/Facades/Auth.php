@@ -19,7 +19,7 @@ namespace WpPluginner\Illuminate\Support\Facades;
  * @method static bool viaRemember()
  * @method static void logout()
  *
- * @see \WpPluginner\Illuminate\Auth\AuthManager
+ * @see \WpPluginner\WpPluginner\Illuminate\Auth\AuthManager
  * @see \WpPluginner\Illuminate\Contracts\Auth\Factory
  * @see \WpPluginner\Illuminate\Contracts\Auth\Guard
  * @see \WpPluginner\Illuminate\Contracts\Auth\StatefulGuard

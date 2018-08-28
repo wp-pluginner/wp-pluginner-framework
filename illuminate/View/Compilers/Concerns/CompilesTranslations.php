@@ -16,9 +16,9 @@ trait CompilesTranslations
             return '<?php $__env->startTranslation(); ?>';
         } elseif ($expression[1] === '[') {
             return "<?php \$__env->startTranslation{$expression}; ?>";
-        } else {
-            return "<?php echo app('translator')->getFromJson{$expression}; ?>";
         }
+
+        return "<?php echo wp_pluginner('translator')->getFromJson{$expression}; ?>";
     }
 
     /**
@@ -39,6 +39,6 @@ trait CompilesTranslations
      */
     protected function compileChoice($expression)
     {
-        return "<?php echo app('translator')->choice{$expression}; ?>";
+        return "<?php echo wp_pluginner('translator')->choice{$expression}; ?>";
     }
 }

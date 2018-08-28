@@ -5,7 +5,7 @@ namespace WpPluginner\Illuminate\Broadcasting\Broadcasters;
 use WpPluginner\Illuminate\Support\Arr;
 use WpPluginner\Illuminate\Support\Str;
 use WpPluginner\Illuminate\Contracts\Redis\Factory as Redis;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class RedisBroadcaster extends Broadcaster
 {
@@ -41,12 +41,13 @@ class RedisBroadcaster extends Broadcaster
      *
      * @param  \WpPluginner\Illuminate\Http\Request  $request
      * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function auth($request)
     {
         if (Str::startsWith($request->channel_name, ['private-', 'presence-']) &&
             ! $request->user()) {
-            throw new HttpException(403);
+            throw new AccessDeniedHttpException;
         }
 
         $channelName = Str::startsWith($request->channel_name, 'private-')

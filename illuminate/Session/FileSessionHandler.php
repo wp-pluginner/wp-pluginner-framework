@@ -2,8 +2,8 @@
 
 namespace WpPluginner\Illuminate\Session;
 
-use Carbon\Carbon;
 use SessionHandlerInterface;
+use WpPluginner\Illuminate\Support\Carbon;
 use Symfony\Component\Finder\Finder;
 use WpPluginner\Illuminate\Filesystem\Filesystem;
 

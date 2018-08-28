@@ -139,6 +139,27 @@ class Factory implements FactoryContract
     }
 
     /**
+     * Get the first view that actually exists from the given list.
+     *
+     * @param  array  $views
+     * @param  array   $data
+     * @param  array   $mergeData
+     * @return \WpPluginner\Illuminate\Contracts\View\View
+     */
+    public function first(array $views, $data = [], $mergeData = [])
+    {
+        $view = wp_pluginner_collect($views)->first(function ($view) {
+            return $this->exists($view);
+        });
+
+        if (! $view) {
+            throw new InvalidArgumentException('None of the views in the given array exist.');
+        }
+
+        return $this->make($view, $data, $mergeData);
+    }
+
+    /**
      * Get the rendered content of the view based on a given condition.
      *
      * @param  bool  $condition
@@ -248,7 +269,7 @@ class Factory implements FactoryContract
      * Get the appropriate view engine for the given path.
      *
      * @param  string  $path
-     * @return \WpPluginner\Illuminate\View\Engines\EngineInterface
+     * @return \WpPluginner\Illuminate\Contracts\View\Engine
      *
      * @throws \InvalidArgumentException
      */

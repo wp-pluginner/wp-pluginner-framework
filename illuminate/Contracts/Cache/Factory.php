@@ -8,7 +8,7 @@ interface Factory
      * Get a cache store instance by name.
      *
      * @param  string|null  $name
-     * @return mixed
+     * @return \WpPluginner\Illuminate\Contracts\Cache\Repository
      */
     public function store($name = null);
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace WpPluginner\Illuminate\View\Engines;
+namespace WpPluginner\Illuminate\Contracts\View;
 
-interface EngineInterface
+interface Engine
 {
     /**
      * Get the evaluated contents of the view.

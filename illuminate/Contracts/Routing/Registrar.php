@@ -74,7 +74,7 @@ interface Registrar
      * @param  string  $name
      * @param  string  $controller
      * @param  array   $options
-     * @return void
+     * @return \WpPluginner\Illuminate\Routing\PendingResourceRegistration
      */
     public function resource($name, $controller, array $options = []);
 

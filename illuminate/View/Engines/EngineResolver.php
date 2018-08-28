@@ -41,7 +41,7 @@ class EngineResolver
      * Resolve an engine instance by name.
      *
      * @param  string  $engine
-     * @return \WpPluginner\Illuminate\View\Engines\EngineInterface
+     * @return \WpPluginner\Illuminate\Contracts\View\Engine
      * @throws \InvalidArgumentException
      */
     public function resolve($engine)

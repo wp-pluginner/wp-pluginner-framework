@@ -104,6 +104,20 @@ if (! function_exists('wp_pluginner_dispatch')) {
     }
 }
 
+if (! function_exists('wp_pluginner_dispatch_now')) {
+    /**
+     * Dispatch a command to its appropriate handler in the current process.
+     *
+     * @param  mixed  $job
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    function wp_pluginner_dispatch_now($job, $handler = null)
+    {
+        return wp_pluginner(Dispatcher::class)->dispatchNow($job, $handler);
+    }
+}
+
 if (! function_exists('wp_pluginner_config')) {
     /**
      * Get / set the specified configuration value.
@@ -125,6 +139,19 @@ if (! function_exists('wp_pluginner_config')) {
         }
 
         return wp_pluginner('config')->get($key, $default);
+    }
+}
+
+if (! function_exists('wp_pluginner_config_path')) {
+    /**
+     * Get the path to the database directory of the install.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function wp_pluginner_config_path($path = '')
+    {
+        return wp_pluginner()->configPath($path);
     }
 }
 

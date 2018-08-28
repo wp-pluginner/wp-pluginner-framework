@@ -3,7 +3,7 @@
 namespace WpPluginner\Illuminate\Session\Middleware;
 
 use Closure;
-use WpPluginner\Illuminate\Auth\AuthenticationException;
+use WpPluginner\WpPluginner\Illuminate\Auth\AuthenticationException;
 use WpPluginner\Illuminate\Contracts\Auth\Factory as AuthFactory;
 
 class AuthenticateSession
@@ -39,8 +39,12 @@ class AuthenticateSession
             return $next($request);
         }
 
-        if (! $request->session()->has('password_hash') && $this->auth->viaRemember()) {
-            $this->logout($request);
+        if ($this->auth->viaRemember()) {
+            $passwordHash = explode('|', $request->cookies->get($this->auth->getRecallerName()))[2];
+
+            if ($passwordHash != $request->user()->getAuthPassword()) {
+                $this->logout($request);
+            }
         }
 
         if (! $request->session()->has('password_hash')) {
@@ -79,7 +83,7 @@ class AuthenticateSession
      * @param  \WpPluginner\Illuminate\Http\Request  $request
      * @return void
      *
-     * @throws \WpPluginner\Illuminate\Auth\AuthenticationException
+     * @throws \WpPluginner\WpPluginner\Illuminate\Auth\AuthenticationException
      */
     protected function logout($request)
     {

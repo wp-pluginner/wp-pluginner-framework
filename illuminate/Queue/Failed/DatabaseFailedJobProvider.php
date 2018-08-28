@@ -2,7 +2,7 @@
 
 namespace WpPluginner\Illuminate\Queue\Failed;
 
-use Carbon\Carbon;
+use WpPluginner\Illuminate\Support\Carbon;
 use WpPluginner\Illuminate\Database\ConnectionResolverInterface;
 
 class DatabaseFailedJobProvider implements FailedJobProviderInterface
@@ -77,7 +77,7 @@ class DatabaseFailedJobProvider implements FailedJobProviderInterface
      * Get a single failed job.
      *
      * @param  mixed  $id
-     * @return array
+     * @return object|null
      */
     public function find($id)
     {

@@ -3,7 +3,7 @@
 namespace WpPluginner\Illuminate\Console\Scheduling;
 
 use WpPluginner\Illuminate\Console\Application;
-use Symfony\Component\Process\ProcessUtils;
+use WpPluginner\Illuminate\Support\ProcessUtils;
 
 class CommandBuilder
 {
@@ -17,9 +17,9 @@ class CommandBuilder
     {
         if ($event->runInBackground) {
             return $this->buildBackgroundCommand($event);
-        } else {
-            return $this->buildForegroundCommand($event);
         }
+
+        return $this->buildForegroundCommand($event);
     }
 
     /**

@@ -7,7 +7,7 @@ The Illuminate Database component is a full database toolkit for PHP, providing 
 First, create a new "Capsule" manager instance. Capsule aims to make configuring the library for usage outside of the Laravel framework as easy as possible.
 
 ```PHP
-use Illuminate\Database\Capsule\Manager as Capsule;
+use WpPluginner\Illuminate\Database\Capsule\Manager as Capsule;
 
 $capsule = new Capsule;
 
@@ -23,8 +23,8 @@ $capsule->addConnection([
 ]);
 
 // Set the event dispatcher used by Eloquent models... (optional)
-use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
+use WpPluginner\Illuminate\Events\Dispatcher;
+use WpPluginner\Illuminate\Container\Container;
 $capsule->setEventDispatcher(new Dispatcher(new Container));
 
 // Make this Capsule instance available globally via static methods... (optional)
@@ -61,7 +61,7 @@ Capsule::schema()->create('users', function ($table) {
 **Using The Eloquent ORM**
 
 ```PHP
-class User extends Illuminate\Database\Eloquent\Model {}
+class User extends WpPluginner\Illuminate\Database\Eloquent\Model {}
 
 $users = User::where('votes', '>', 1)->get();
 ```

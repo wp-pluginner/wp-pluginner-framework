@@ -12,7 +12,7 @@ trait CompilesAuthorizations
      */
     protected function compileCan($expression)
     {
-        return "<?php if (app(\WpPluginner\Illuminate\\Contracts\\Auth\\Access\\Gate::class)->check{$expression}): ?>";
+        return "<?php if (wp_pluginner(\WpPluginner\\WpPluginner\Illuminate\\Contracts\\Auth\\Access\\Gate::class)->check{$expression}): ?>";
     }
 
     /**
@@ -23,7 +23,7 @@ trait CompilesAuthorizations
      */
     protected function compileCannot($expression)
     {
-        return "<?php if (app(\WpPluginner\Illuminate\\Contracts\\Auth\\Access\\Gate::class)->denies{$expression}): ?>";
+        return "<?php if (wp_pluginner(\WpPluginner\\WpPluginner\Illuminate\\Contracts\\Auth\\Access\\Gate::class)->denies{$expression}): ?>";
     }
 
     /**
@@ -34,7 +34,7 @@ trait CompilesAuthorizations
      */
     protected function compileElsecan($expression)
     {
-        return "<?php elseif (app(\WpPluginner\Illuminate\\Contracts\\Auth\\Access\\Gate::class)->check{$expression}): ?>";
+        return "<?php elseif (wp_pluginner(\WpPluginner\\WpPluginner\Illuminate\\Contracts\\Auth\\Access\\Gate::class)->check{$expression}): ?>";
     }
 
     /**
@@ -45,7 +45,7 @@ trait CompilesAuthorizations
      */
     protected function compileElsecannot($expression)
     {
-        return "<?php elseif (app(\WpPluginner\Illuminate\\Contracts\\Auth\\Access\\Gate::class)->denies{$expression}): ?>";
+        return "<?php elseif (wp_pluginner(\WpPluginner\\WpPluginner\Illuminate\\Contracts\\Auth\\Access\\Gate::class)->denies{$expression}): ?>";
     }
 
     /**

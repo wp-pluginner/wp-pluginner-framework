@@ -17,4 +17,12 @@ interface UrlRoutable
      * @return string
      */
     public function getRouteKeyName();
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  mixed  $value
+     * @return \WpPluginner\Illuminate\Database\Eloquent\Model|null
+     */
+    public function resolveRouteBinding($value);
 }

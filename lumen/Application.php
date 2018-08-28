@@ -7,6 +7,7 @@ use RuntimeException;
 use WpPluginner\Illuminate\Support\Str;
 use WpPluginner\Illuminate\Http\Request;
 use WpPluginner\Illuminate\Support\Composer;
+use WpPluginner\Lumen\Routing\Router;
 use Monolog\Handler\StreamHandler;
 use WpPluginner\Illuminate\Container\Container;
 use Monolog\Formatter\LineFormatter;
@@ -73,6 +74,13 @@ class Application extends Container
     protected $namespace;
 
     /**
+     * The Router instance.
+     *
+     * @var \WpPluginner\Lumen\Routing\Router
+     */
+    public $router;
+
+    /**
      * Create a new Lumen application instance.
      *
      * @param  string|null  $basePath
@@ -80,14 +88,15 @@ class Application extends Container
      */
     public function __construct($basePath = null)
     {
-        if (! empty(env('APP_TIMEZONE'))) {
-            date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
+        if (! empty(wp_pluginner_env('APP_TIMEZONE'))) {
+            date_default_timezone_set(wp_pluginner_env('APP_TIMEZONE', 'UTC'));
         }
 
         $this->basePath = $basePath;
 
         $this->bootstrapContainer();
         $this->registerErrorHandling();
+        $this->bootstrapRouter();
     }
 
     /**
@@ -108,13 +117,23 @@ class Application extends Container
     }
 
     /**
+     * Bootstrap the router instance.
+     *
+     * @return void
+     */
+    public function bootstrapRouter()
+    {
+        $this->router = new Router($this);
+    }
+
+    /**
      * Get the version number of the application.
      *
      * @return string
      */
     public function version()
     {
-        return 'Lumen (5.4.7) (Laravel Components 5.4.*)';
+        return 'Lumen (5.5.2) (WpPluginner Components 5.5.*)';
     }
 
     /**
@@ -135,7 +154,7 @@ class Application extends Container
      */
     public function environment()
     {
-        $env = env('APP_ENV', config('app.env', 'production'));
+        $env = wp_pluginner_env('APP_ENV', wp_pluginner_config('app.env', 'production'));
 
         if (func_num_args() > 0) {
             $patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
@@ -194,9 +213,10 @@ class Application extends Container
      * Resolve the given type from the container.
      *
      * @param  string  $abstract
+     * @param  array  $parameters
      * @return mixed
      */
-    public function make($abstract)
+    public function make($abstract, array $parameters = [])
     {
         $abstract = $this->getAlias($abstract);
 
@@ -207,7 +227,7 @@ class Application extends Container
             $this->ranServiceBinders[$method] = true;
         }
 
-        return parent::make($abstract);
+        return parent::make($abstract, $parameters);
     }
 
     /**
@@ -218,15 +238,15 @@ class Application extends Container
     protected function registerAuthBindings()
     {
         $this->singleton('auth', function () {
-            return $this->loadComponent('auth', 'WpPluginner\Illuminate\Auth\AuthServiceProvider', 'auth');
+            return $this->loadComponent('auth', 'WpPluginner\WpPluginner\Illuminate\Auth\AuthServiceProvider', 'auth');
         });
 
         $this->singleton('auth.driver', function () {
-            return $this->loadComponent('auth', 'WpPluginner\Illuminate\Auth\AuthServiceProvider', 'auth.driver');
+            return $this->loadComponent('auth', 'WpPluginner\WpPluginner\Illuminate\Auth\AuthServiceProvider', 'auth.driver');
         });
 
         $this->singleton('WpPluginner\Illuminate\Contracts\Auth\Access\Gate', function () {
-            return $this->loadComponent('auth', 'WpPluginner\Illuminate\Auth\AuthServiceProvider', 'WpPluginner\Illuminate\Contracts\Auth\Access\Gate');
+            return $this->loadComponent('auth', 'WpPluginner\WpPluginner\Illuminate\Auth\AuthServiceProvider', 'WpPluginner\Illuminate\Contracts\Auth\Access\Gate');
         });
     }
 
@@ -413,13 +433,25 @@ class Application extends Container
     }
 
     /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerRouterBindings()
+    {
+        $this->singleton('router', function () {
+            return $this->router;
+        });
+    }
+
+    /**
      * Get the Monolog handler for the application.
      *
      * @return \Monolog\Handler\AbstractHandler
      */
     protected function getMonologHandler()
     {
-        return (new StreamHandler(storage_path('logs/lumen.log'), Logger::DEBUG))
+        return (new StreamHandler(wp_pluginner_storage_path('logs/lumen.log'), Logger::DEBUG))
                             ->setFormatter(new LineFormatter(null, null, true, true));
     }
 
@@ -534,7 +566,7 @@ class Application extends Container
     protected function registerViewBindings()
     {
         $this->singleton('view', function () {
-            return $this->loadComponent('view', 'WpPluginner\Wordpress\View\ViewServiceProvider');
+            return $this->loadComponent('view', 'WpPluginner\Illuminate\View\ViewServiceProvider');
         });
     }
 
@@ -639,6 +671,7 @@ class Application extends Container
             'WpPluginner\Illuminate\Support\Facades\Gate' => 'Gate',
             'WpPluginner\Illuminate\Support\Facades\Log' => 'Log',
             'WpPluginner\Illuminate\Support\Facades\Queue' => 'Queue',
+            'WpPluginner\Illuminate\Support\Facades\Route' => 'Route',
             'WpPluginner\Illuminate\Support\Facades\Schema' => 'Schema',
             'WpPluginner\Illuminate\Support\Facades\URL' => 'URL',
             'WpPluginner\Illuminate\Support\Facades\Validator' => 'Validator',
@@ -781,11 +814,11 @@ class Application extends Container
             return $this->namespace;
         }
 
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(file_get_contents(wp_pluginner_base_path('composer.json')), true);
 
-        foreach ((array) data_get($composer, 'autoload.psr-4') as $namespace => $path) {
+        foreach ((array) wp_pluginner_data_get($composer, 'autoload.psr-4') as $namespace => $path) {
             foreach ((array) $path as $pathChoice) {
-                if (realpath(app()->path()) == realpath(base_path().'/'.$pathChoice)) {
+                if (realpath(wp_pluginner()->path()) == realpath(wp_pluginner_base_path().'/'.$pathChoice)) {
                     return $this->namespace = $namespace;
                 }
             }
@@ -819,6 +852,7 @@ class Application extends Container
             'WpPluginner\Illuminate\Contracts\Queue\Factory' => 'queue',
             'WpPluginner\Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'WpPluginner\Illuminate\Http\Request',
+            'WpPluginner\Lumen\Routing\Router' => 'router',
             'WpPluginner\Lumen\Routing\UrlGenerator' => 'url',
             'WpPluginner\Illuminate\Contracts\Validation\Factory' => 'validator',
             'WpPluginner\Illuminate\Contracts\View\Factory' => 'view',
@@ -833,7 +867,7 @@ class Application extends Container
     public $availableBindings = [
         'auth' => 'registerAuthBindings',
         'auth.driver' => 'registerAuthBindings',
-        'WpPluginner\Illuminate\Auth\AuthManager' => 'registerAuthBindings',
+        'WpPluginner\WpPluginner\Illuminate\Auth\AuthManager' => 'registerAuthBindings',
         'WpPluginner\Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
         'WpPluginner\Illuminate\Contracts\Auth\Access\Gate' => 'registerAuthBindings',
         'WpPluginner\Illuminate\Contracts\Broadcasting\Broadcaster' => 'registerBroadcastingBindings',
@@ -860,6 +894,7 @@ class Application extends Container
         'queue.connection' => 'registerQueueBindings',
         'WpPluginner\Illuminate\Contracts\Queue\Factory' => 'registerQueueBindings',
         'WpPluginner\Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
+        'router' => 'registerRouterBindings',
         'Psr\Http\Message\ServerRequestInterface' => 'registerPsrRequestBindings',
         'Psr\Http\Message\ResponseInterface' => 'registerPsrResponseBindings',
         'translator' => 'registerTranslationBindings',

@@ -103,7 +103,7 @@ class BoundMethod
     /**
      * Get all dependencies for a given method.
      *
-     * @param  \WpPluginner\Illuminate\Container\Container
+     * @param  \WpPluginner\Illuminate\Container\Container  $container
      * @param  callable|string  $callback
      * @param  array  $parameters
      * @return array

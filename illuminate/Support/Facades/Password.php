@@ -3,7 +3,7 @@
 namespace WpPluginner\Illuminate\Support\Facades;
 
 /**
- * @see \WpPluginner\Illuminate\Auth\Passwords\PasswordBroker
+ * @see \WpPluginner\WpPluginner\Illuminate\Auth\Passwords\PasswordBroker
  */
 class Password extends Facade
 {
