@@ -1,4 +1,5 @@
 <?php
+use WpPluginner\Illuminate\Support\Debug\Dumper;
 
 if (! function_exists('wp_pluginner_timezone')) {
     function wp_pluginner_timezone()
@@ -18,5 +19,20 @@ if (! function_exists('wp_pluginner_timezone')) {
 			}
 			return $offset;
 		}
+    }
+}
+
+if (! function_exists('wp_pluginner_dump')) {
+    /**
+     * Dump the passed variables and end the script.
+     *
+     * @param  mixed  $args
+     * @return void
+     */
+    function wp_pluginner_dump(...$args)
+    {
+        foreach ($args as $x) {
+            (new Dumper)->dump($x);
+        }
     }
 }
